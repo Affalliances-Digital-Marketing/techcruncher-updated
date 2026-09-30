@@ -39,13 +39,13 @@ export function LogoMark({ className, tone = "default" }: { className?: string; 
 const wordmarkSize: Record<LogoSize, string> = {
   sm: "text-[14px]",
   md: "text-[17px] sm:text-[21px]",
-  lg: "text-[30px] sm:text-[40px]",
+  lg: "text-[22px] min-[380px]:text-[26px] sm:text-[36px] 2xl:text-[40px]",
 };
 
 const taglineSize: Record<LogoSize, string> = {
   sm: "text-[7px] tracking-[0.3em]",
   md: "text-[8px] tracking-[0.34em]",
-  lg: "text-[11px] tracking-[0.42em] sm:text-[13px]",
+  lg: "text-[9px] tracking-[0.3em] min-[380px]:text-[10px] min-[380px]:tracking-[0.34em] sm:text-[12px] sm:tracking-[0.42em] 2xl:text-[13px]",
 };
 
 /** "TECH" in ink, "CRUNCHER" in brand orange, optional tagline underneath. */
@@ -84,7 +84,7 @@ export function Wordmark({
 const markSize: Record<LogoSize, string> = {
   sm: "h-5",
   md: "h-7 sm:h-8",
-  lg: "h-12 sm:h-16",
+  lg: "h-9 min-[380px]:h-10 sm:h-14 2xl:h-16",
 };
 
 interface LogoProps {

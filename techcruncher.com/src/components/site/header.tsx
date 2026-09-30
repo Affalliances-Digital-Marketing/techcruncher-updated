@@ -156,13 +156,13 @@ export function Header({ categories, headline }: HeaderProps) {
               scrolled ? "h-[52px]" : "h-[60px] sm:h-[66px]",
             )}
           >
-            <button type="button" aria-label="Open menu" onClick={() => setDrawerOpen(true)} className={cn(iconButton, "-ml-2 lg:hidden")}>
+            <button type="button" aria-label="Open menu" onClick={() => setDrawerOpen(true)} className={cn(iconButton, "-ml-2 xl:hidden")}>
               <Menu className="h-5 w-5" aria-hidden="true" />
             </button>
 
             <Logo compact={scrolled} />
 
-            <nav aria-label="Sections" className="hidden items-center gap-5 lg:flex">
+            <nav aria-label="Sections" className="hidden items-center gap-5 xl:flex">
               {sections.map((section) => {
                 const active = pathname === section.href;
                 return (

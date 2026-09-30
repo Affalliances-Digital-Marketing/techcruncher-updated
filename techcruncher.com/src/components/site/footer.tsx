@@ -54,8 +54,8 @@ export function Footer({ categories, tags }: { categories: Category[]; tags: Tag
       {/* Footer slot; renders only when an ad is booked on it. */}
       <AdSlot position="footer" className="container pt-6" />
       <div className="border-b border-line">
-        <div className="container grid gap-9 py-10 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-5">
+        <div className="container grid gap-10 py-10 xl:grid-cols-12 xl:gap-12">
+          <div className="min-w-0 xl:col-span-6 2xl:col-span-5">
             <Logo size="lg" />
             <p className="mt-4 max-w-sm text-[14px] leading-relaxed text-ink-soft">
               Independent reporting on the technology, business and culture shaping what comes next — written plainly,
@@ -76,7 +76,7 @@ export function Footer({ categories, tags }: { categories: Category[]; tags: Tag
               ))}
             </div>
           </div>
-          <div className="lg:col-span-7">
+          <div className="min-w-0 xl:col-span-6 2xl:col-span-7">
             <NewsletterCard variant="plain" source="footer" />
           </div>
         </div>
