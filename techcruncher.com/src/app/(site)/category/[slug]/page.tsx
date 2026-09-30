@@ -6,11 +6,11 @@ import { ArticleFeed } from "@/components/site/article-feed";
 import { FilterBar } from "@/components/site/filter-bar";
 import { PageHeader } from "@/components/site/headers";
 import { ListSkeleton } from "@/components/ui/skeleton";
-import { site } from "@/config/site";
 import type { Category, News, Paginated } from "@/types/api";
 import { ApiError } from "@/lib/api/client";
 import { publicApi } from "@/lib/api/public";
 import { categoryHref, stripHtml } from "@/lib/news";
+import { breadcrumbLd, pageSeo } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -29,18 +29,26 @@ const loadCategory = cache(async (slug: string): Promise<Category | null> => {
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
   const category = await loadCategory(slug);
-  if (!category) return { title: "Topic not found" };
+  if (!category) return { title: "Topic not found", robots: { index: false } };
 
   const description =
-    category.metaDescription || category.seoDescription || stripHtml(category.description || "") || `Everything we publish about ${category.name}.`;
+    category.metaDescription ||
+    category.seoDescription ||
+    stripHtml(category.description || "") ||
+    `The latest ${category.name} news, analysis and reviews from our newsroom — every story we publish on the subject, newest first.`;
 
-  return {
+  const seo = pageSeo({
     title: category.metaTitle || category.seoTitle || category.name,
     description,
-    alternates: { canonical: category.canonicalUrl || `${site.url}${categoryHref(category)}` },
-    robots: category.robots?.includes("noindex") ? { index: false } : undefined,
-    openGraph: { title: category.name, description, images: category.ogImage?.url ? [category.ogImage.url] : undefined },
-  };
+    path: categoryHref(category),
+    image: category.ogImage?.url,
+    keywords: [category.name, `${category.name} news`, `latest ${category.name}`],
+    noIndex: category.robots?.includes("noindex"),
+  });
+
+  // A topic may pin its own canonical in the CMS, e.g. when two slugs cover
+  // the same desk; that choice outranks the one derived from the route.
+  return category.canonicalUrl ? { ...seo, alternates: { canonical: category.canonicalUrl } } : seo;
 }
 
 export default async function CategoryPage({ params }: { params: Promise<Params> }) {
@@ -75,6 +83,14 @@ export default async function CategoryPage({ params }: { params: Promise<Params>
         )}
       </PageHeader>
 
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbLd([{ name: "Topics", path: "/categories" }, { name: category.name, path: categoryHref(category) }]),
+          ),
+        }}
+      />
       <div className="container py-9">
         {/* Same treatment as the homepage strip: a little wider than the copy beneath it. */}
         <AdSlot position="category-top" fixed className="-mx-2 mb-12 w-auto sm:-mx-4 lg:-mx-8" category={category._id} />

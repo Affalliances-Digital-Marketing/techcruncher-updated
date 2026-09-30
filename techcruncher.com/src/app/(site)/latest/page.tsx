@@ -9,10 +9,17 @@ import { LATEST_PARAMS } from "@/components/site/feeds/params";
 import { loadNews, loadPublishingPace, topicOptions } from "@/components/site/feeds/server";
 import { TopicFilter } from "@/components/site/feeds/topic-filter";
 import { getCategories, topicsByVolume } from "@/lib/api/server-data";
+import { pageSeo } from "@/lib/seo";
 
 const description = "Everything our editors publish, newest first — filed by the day it ran.";
 
-export const metadata: Metadata = { title: "Latest", description };
+export const metadata: Metadata = pageSeo({
+  title: "Latest technology news",
+  description:
+    "Every story we publish, newest first: AI, startups, fintech, software, security and consumer tech, filed the day it runs.",
+  path: "/latest",
+  keywords: ["latest technology news", "tech news today", "breaking tech news"],
+});
 
 export default async function LatestPage() {
   const [initial, categories, pace] = await Promise.all([loadNews(LATEST_PARAMS), getCategories(), loadPublishingPace()]);

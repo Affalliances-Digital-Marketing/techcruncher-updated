@@ -7,7 +7,7 @@ import { categoryHref, newsHref } from "@/lib/news";
 
 export const revalidate = 3600;
 
-const STATIC_ROUTES = ["", "/latest", "/trending", "/popular", "/videos", "/gallery", "/categories", "/about", "/contact", "/newsletter", "/privacy", "/terms"];
+const STATIC_ROUTES = ["", "/latest", "/trending", "/popular", "/videos", "/gallery", "/categories", "/sitemap", "/about", "/contact", "/newsletter", "/privacy", "/terms"];
 
 const MAX_PAGES = 20; // 2,000 most recent stories
 

@@ -7,10 +7,17 @@ import { TopicFilter } from "@/components/site/feeds/topic-filter";
 import { TrendingBoard } from "@/components/site/feeds/trending-board";
 import { ListSkeleton } from "@/components/ui/skeleton";
 import { getCategories, topicsByVolume } from "@/lib/api/server-data";
+import { pageSeo } from "@/lib/seo";
 
 const description = "Ranked by how much readers are viewing, liking and sharing each story.";
 
-export const metadata: Metadata = { title: "Trending", description };
+export const metadata: Metadata = pageSeo({
+  title: "Trending tech stories",
+  description:
+    "The technology stories readers are viewing, liking and sharing the most right now, re-ranked through the day across every desk we cover.",
+  path: "/trending",
+  keywords: ["trending tech news", "most shared technology stories", "what to read in tech"],
+});
 
 export default async function TrendingPage() {
   const [initial, categories] = await Promise.all([loadNews(TRENDING_PARAMS), getCategories()]);

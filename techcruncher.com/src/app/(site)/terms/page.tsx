@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/site/headers";
 import { site } from "@/config/site";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Terms of use" };
+export const metadata: Metadata = pageSeo({
+  title: "Terms of use",
+  description: `The terms you agree to when reading ${site.name}: what you may republish, who owns the reporting and photography, and the limits of what we warrant.`,
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

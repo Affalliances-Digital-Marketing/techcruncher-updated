@@ -4,11 +4,14 @@ import { PageHeader } from "@/components/site/headers";
 import { NewsletterCard } from "@/components/site/newsletter-card";
 import { UnsubscribeForm } from "@/components/site/unsubscribe-form";
 import { site } from "@/config/site";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "The daily brief",
-  description: `The ${site.name} daily brief: the stories that matter, in two minutes, every weekday.`,
-};
+export const metadata: Metadata = pageSeo({
+  title: "The daily brief newsletter",
+  description: `A free daily technology newsletter: the ${site.name} stories that matter and what they mean, read in two minutes, every weekday morning. Unsubscribe in one click.`,
+  path: "/newsletter",
+  keywords: ["technology newsletter", "daily tech briefing", "free tech news email"],
+});
 
 export default function NewsletterPage() {
   return (

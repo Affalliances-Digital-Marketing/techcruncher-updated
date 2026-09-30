@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/site/contact-form";
 import { PageHeader } from "@/components/site/headers";
 import { site } from "@/config/site";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: `Get in touch with the ${site.name} newsroom — tips, corrections, partnerships and general questions.`,
-};
+export const metadata: Metadata = pageSeo({
+  title: "Contact the newsroom",
+  description: `Reach the ${site.name} newsroom directly: send a story tip, report a correction, ask about advertising or partnerships, or just say hello. Every message goes to a person.`,
+  path: "/contact",
+  keywords: [`contact ${site.name}`, "tech news tips", "advertise on a tech site", "report a correction"],
+});
 
 export default function ContactPage() {
   return (

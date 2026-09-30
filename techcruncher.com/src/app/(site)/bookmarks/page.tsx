@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/site/headers";
 import { ReadingList } from "@/components/site/reading-list";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Reading list", robots: { index: false } };
+export const metadata: Metadata = pageSeo({
+  title: "Reading list",
+  description: "The stories you saved, kept in this browser alone.",
+  path: "/bookmarks",
+  // Per-reader and empty for a crawler, so it is served but not indexed.
+  noIndex: true,
+});
 
 export default function BookmarksPage() {
   return (

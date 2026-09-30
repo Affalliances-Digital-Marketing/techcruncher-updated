@@ -3,11 +3,14 @@ import Link from "next/link";
 import { PageHeader } from "@/components/site/headers";
 import { NewsletterCard } from "@/components/site/newsletter-card";
 import { site } from "@/config/site";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
   title: `About ${site.name}`,
-  description: site.description,
-};
+  description: `${site.name} is an independent technology newsroom covering AI, startups, software and the products people actually use. Who we are, how we report and how we correct our mistakes.`,
+  path: "/about",
+  keywords: [`about ${site.name}`, "independent technology newsroom", "tech news editorial standards"],
+});
 
 const numbers = [
   { label: "Published", value: "Seven days a week" },

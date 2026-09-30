@@ -44,6 +44,7 @@ import {
   subCategoryOf,
   toSavedStory,
 } from "@/lib/news";
+import { OG_IMAGE, breadcrumbLd } from "@/lib/seo";
 
 type Params = { slug: string };
 
@@ -68,11 +69,11 @@ async function settle<T>(promise: Promise<T>, fallback: T): Promise<T> {
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const { slug } = await params;
   const news = await loadArticle(slug);
-  if (!news) return { title: "Story not found" };
+  if (!news) return { title: "Story not found", robots: { index: false } };
 
   const url = news.canonicalUrl || `${site.url}${newsHref(news)}`;
   const description = news.metaDescription || news.seoDescription || excerptOf(news, 160);
-  const ogImage = news.ogImage?.url || imageOf(news)?.url;
+  const ogImage = news.ogImage?.url || imageOf(news)?.url || OG_IMAGE;
   const robots = (news.robots || "index, follow").toLowerCase();
 
   return {
@@ -87,7 +88,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       url,
       title: news.metaTitle || news.title,
       description,
-      images: ogImage ? [{ url: ogImage, alt: news.ogImage?.alt || news.title }] : undefined,
+      images: [{ url: ogImage, alt: news.ogImage?.alt || news.title }],
       publishedTime: newsDate(news) || undefined,
       modifiedTime: news.updatedDate || news.updatedAt || undefined,
       section: categoryOf(news)?.name,
@@ -97,7 +98,7 @@ export async function generateMetadata({ params }: { params: Promise<Params> }):
       card: "summary_large_image",
       title: news.metaTitle || news.title,
       description,
-      images: news.twitterImage?.url || ogImage ? [news.twitterImage?.url || ogImage!] : undefined,
+      images: [news.twitterImage?.url || ogImage],
     },
   };
 }
@@ -157,15 +158,30 @@ export default async function ArticlePage({ params }: { params: Promise<Params> 
     datePublished: date || undefined,
     dateModified: news.updatedDate || news.updatedAt || undefined,
     author: { "@type": "Person", name: authorName(news) },
-    publisher: { "@type": "Organization", name: site.name },
+    publisher: {
+      "@type": "Organization",
+      name: site.name,
+      logo: { "@type": "ImageObject", url: `${site.url}/icon-512.png`, width: 512, height: 512 },
+    },
     mainEntityOfPage: url,
     articleSection: category?.name,
     keywords: news.tagNames?.join(", "),
   };
 
+  // The trail Google shows in place of a bare URL, and what the reader sees
+  // above the headline — the same one, stated in a form a crawler reads.
+  const trail = [
+    { name: "Topics", path: "/categories" },
+    ...(category ? [{ name: category.name, path: categoryHref(category) }] : []),
+    { name: news.title, path: newsHref(news) },
+  ];
+
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([jsonLd, breadcrumbLd(trail)]).replace(/</g, "\\u003c") }}
+      />
       <ReadingProgress />
 
       <div className="container py-7 sm:py-8">

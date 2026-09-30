@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/site/headers";
 import { site } from "@/config/site";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = { title: "Privacy policy" };
+export const metadata: Metadata = pageSeo({
+  title: "Privacy policy",
+  description: `What ${site.name} collects when you read, subscribe or write to us, how long it is kept, who it is shared with, and how to have it removed.`,
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

@@ -7,6 +7,7 @@ import { site } from "@/config/site";
 import type { News, Paginated } from "@/types/api";
 import { publicApi } from "@/lib/api/public";
 import { initials } from "@/lib/news";
+import { breadcrumbLd, pageSeo } from "@/lib/seo";
 
 type Params = { name: string };
 
@@ -15,7 +16,12 @@ const toAuthorFilter = (name: string) => `^${name.replace(/[.*+?^${}()|[\]\\]/g,
 
 export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
   const name = decodeURIComponent((await params).name);
-  return { title: name, description: `Every story filed by ${name} for ${site.name}.` };
+  return pageSeo({
+    title: name,
+    description: `Every story filed by ${name} for ${site.name} — reporting, reviews and analysis, newest first.`,
+    path: `/author/${encodeURIComponent(name)}`,
+    keywords: [name, `${name} ${site.name}`],
+  });
 }
 
 export default async function AuthorPage({ params }: { params: Promise<Params> }) {
@@ -41,6 +47,14 @@ export default async function AuthorPage({ params }: { params: Promise<Params> }
           {initials(name)}
         </span>
       </PageHeader>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            breadcrumbLd([{ name: "Authors", path: "/sitemap" }, { name, path: `/author/${encodeURIComponent(name)}` }]),
+          ),
+        }}
+      />
       <div className="container py-9">
         <Suspense fallback={<ListSkeleton count={8} />}>
           <ArticleFeed params={filter} initial={initial} emptyMessage={`${name} has not published any stories yet.`} />

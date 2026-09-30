@@ -7,10 +7,17 @@ import { loadNews, topicOptions } from "@/components/site/feeds/server";
 import { TopicFilter } from "@/components/site/feeds/topic-filter";
 import { ListSkeleton } from "@/components/ui/skeleton";
 import { getCategories, topicsByVolume } from "@/lib/api/server-data";
+import { pageSeo } from "@/lib/seo";
 
 const description = "Ranked purely by how many people actually read each story.";
 
-export const metadata: Metadata = { title: "Most read", description };
+export const metadata: Metadata = pageSeo({
+  title: "Most read technology stories",
+  description:
+    "Our best-read reporting, ranked purely by how many people actually read it — today, this week and all time.",
+  path: "/popular",
+  keywords: ["most read tech stories", "popular technology news", "best tech articles"],
+});
 
 export default async function PopularPage() {
   const [initial, categories] = await Promise.all([loadNews(popularParams("")), getCategories()]);

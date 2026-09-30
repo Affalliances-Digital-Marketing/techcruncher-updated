@@ -6,11 +6,13 @@ import { sections as navSections, site } from "@/config/site";
 import type { Category } from "@/types/api";
 import { getCategories } from "@/lib/api/server-data";
 import { categoryHref } from "@/lib/news";
+import { pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageSeo({
   title: "Sitemap",
-  description: `Every page on ${site.name}, in one place.`,
-};
+  description: `Every section, topic and page on ${site.name} in a single list — the quickest way to reach a desk, a feed or a legal page.`,
+  path: "/sitemap",
+});
 
 const company = [
   { label: "About us", href: "/about" },

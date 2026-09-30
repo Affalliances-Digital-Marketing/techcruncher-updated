@@ -7,11 +7,15 @@ import { SmartImage } from "@/components/ui/smart-image";
 import type { Category } from "@/types/api";
 import { getCategoriesWithCovers } from "@/lib/api/server-data";
 import { categoryHref, stripHtml } from "@/lib/news";
+import { breadcrumbLd, itemListLd, pageSeo } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Topics",
-  description: "Every section we cover, from the busiest desk to the newest.",
-};
+export const metadata: Metadata = pageSeo({
+  title: "All technology topics",
+  description:
+    "Every section we cover — artificial intelligence, startups, fintech, software, security, apps and gadgets — with the newest story from each desk.",
+  path: "/categories",
+  keywords: ["technology topics", "tech news categories", "AI news", "startup news", "fintech news"],
+});
 
 const coverOf = (category: Category) => category.coverImage?.url || category.image?.url || category.banner?.url;
 
@@ -64,8 +68,18 @@ export default async function CategoriesPage() {
 
   const total = topics.reduce((sum, topic) => sum + (topic.articleCount ?? 0), 0);
 
+  // Named, ordered desks: a directory read as a list rather than as prose.
+  const jsonLd = [
+    breadcrumbLd([{ name: "Topics", path: "/categories" }]),
+    itemListLd(
+      topics.map((category) => ({ title: category.name, path: categoryHref(category) })),
+      "Topics we cover",
+    ),
+  ];
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <PageHeader
         eyebrow="Directory"
         title="Topics"

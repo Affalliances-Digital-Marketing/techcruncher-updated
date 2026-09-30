@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/site/states";
 import { ListSkeleton } from "@/components/ui/skeleton";
 import type { News, Paginated } from "@/types/api";
 import { publicApi } from "@/lib/api/public";
+import { pageSeo } from "@/lib/seo";
 
 type SearchParams = Promise<{ q?: string | string[] }>;
 
@@ -14,7 +15,16 @@ const readQuery = (value?: string | string[]) => (Array.isArray(value) ? value[0
 
 export async function generateMetadata({ searchParams }: { searchParams: SearchParams }): Promise<Metadata> {
   const q = readQuery((await searchParams).q);
-  return { title: q ? `Results for “${q}”` : "Search", robots: { index: false } };
+  // A results page has no content of its own, so it is followed but never
+  // indexed; the canonical points at the bare search page, not at one query.
+  return pageSeo({
+    title: q ? `Results for “${q}”` : "Search",
+    description: q
+      ? `Stories matching “${q}” across our technology reporting, reviews and guides.`
+      : "Search every story we have published — technology news, product reviews and buying guides, by keyword or topic.",
+    path: "/search",
+    noIndex: true,
+  });
 }
 
 export default async function SearchPage({ searchParams }: { searchParams: SearchParams }) {
