@@ -14,6 +14,9 @@ export const metadata: Metadata = {
   title: { default: site.title, template: `%s — ${site.name}` },
   description: site.description,
   applicationName: site.name,
+  // Search Console ownership; Next renders this as the
+  // <meta name="google-site-verification"> tag in <head>.
+  verification: { google: "UGvlCXdJwB8Y6uzN9YSsLslMnzcDSA8iF2WBxw1rx7g" },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },

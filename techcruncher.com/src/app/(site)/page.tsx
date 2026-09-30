@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Fragment } from "react";
 import { AdSlot } from "@/components/site/ad-slot";
 import { ArticleListRow, ArticleRankRow, ArticleTileCard, ArticleVideoCard, ArticleWideRow } from "@/components/site/cards";
@@ -23,6 +24,7 @@ import { getCategories, getHomeFeed } from "@/lib/api/server-data";
 import { buildHomeBands } from "@/lib/home";
 import { cn } from "@/lib/cn";
 import { columnsFor } from "@/lib/news";
+import { organizationLd, pageSeo } from "@/lib/seo";
 
 export const revalidate = 60;
 
@@ -99,6 +101,13 @@ async function loadGalleryRails(homepage: Homepage | null): Promise<ResolvedRail
   return Object.fromEntries(entries.filter(([, rail]) => rail)) as ResolvedRails;
 }
 
+export const metadata: Metadata = pageSeo({
+  title: site.title,
+  description:
+    "Independent technology news: AI, startups, fintech, software, security and the apps people actually use — reported plainly and updated every weekday.",
+  keywords: ["technology news", "AI news", "startup news", "fintech", "software reviews", "cybersecurity news"],
+});
+
 export default async function HomePage() {
   const [feed, homepage, recent, categories] = await Promise.all([
     getHomeFeed(),
@@ -122,17 +131,22 @@ export default async function HomePage() {
   const hasStories = bands.slides.length + bands.featured.length + bands.latest.length > 0;
 
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: site.name,
-    url: site.url,
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${site.url}/search?q={search_term_string}`,
-      "query-input": "required name=search_term_string",
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: site.name,
+      url: site.url,
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${site.url}/search?q={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
     },
-  };
+    // States the publisher behind every article, which is what a news result
+    // needs to show a source rather than a bare domain.
+    organizationLd(),
+  ];
 
   return (
     <>
