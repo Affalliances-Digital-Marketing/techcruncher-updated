@@ -39,6 +39,11 @@ export const viewport: Viewport = {
 // ?theme=dark|light pins either palette (handy for sharing screenshots).
 const themeScript = `(function(){try{var k=${JSON.stringify(THEME_STORAGE_KEY)};var f=new URLSearchParams(location.search).get("theme");if(f==="dark"||f==="light"){localStorage.setItem(k,f)}var s=localStorage.getItem(k);var d=s==="dark"||(!s&&window.matchMedia("(prefers-color-scheme: dark)").matches);if(d)document.documentElement.classList.add("dark")}catch(e){}})();`;
 
+const gtagScript = `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-R1SSKBDJ64');`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
@@ -48,6 +53,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-R1SSKBDJ64" />
+        <script dangerouslySetInnerHTML={{ __html: gtagScript }} />
       </head>
       <body>
         <Providers>{children}</Providers>
