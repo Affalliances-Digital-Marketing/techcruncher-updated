@@ -16,7 +16,11 @@ export const metadata: Metadata = {
   applicationName: site.name,
   // Search Console ownership; Next renders this as the
   // <meta name="google-site-verification"> tag in <head>.
-  verification: { google: "UGvlCXdJwB8Y6uzN9YSsLslMnzcDSA8iF2WBxw1rx7g" },
+  verification: {
+    google: "UGvlCXdJwB8Y6uzN9YSsLslMnzcDSA8iF2WBxw1rx7g",
+    // Affiliate OS site verification; renders <meta name="affiliate-os-verification">.
+    other: { "affiliate-os-verification": "3611bd7c52ff059d18ba69d2" },
+  },
   icons: {
     icon: [
       { url: "/favicon.svg", type: "image/svg+xml" },
